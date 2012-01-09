@@ -1,5 +1,9 @@
 package com.pl.adam.projectfiles;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+
 import com.pl.adam.listeners.ChangeWheels;
 import com.pl.adam.listeners.CleanCar;
 import com.pl.adam.listeners.Garage;
@@ -55,6 +59,14 @@ public class Main {
 		{
 			System.out.println(person);
 		}
+		
+		SessionFactory sessionFactory= new Configuration().configure().buildSessionFactory();
+		Session session=sessionFactory.openSession();
+		session.beginTransaction();
+		session.save(c);
+		session.getTransaction().commit();
+		session.close();
+		
 		
 	}
 

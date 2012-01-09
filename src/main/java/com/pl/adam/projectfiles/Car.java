@@ -1,8 +1,29 @@
 package com.pl.adam.projectfiles;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
+@Entity
 public class Car {
 
+	@Id
+	private int id;
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getRegister_number() {
+		return register_number;
+	}
+
+	public void setRegister_number(String register_number) {
+		this.register_number = register_number;
+	}
 	private double prize;
 	
 	public double getPrize() {
