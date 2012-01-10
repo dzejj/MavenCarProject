@@ -1,5 +1,9 @@
 package com.pl.adam.projectfiles;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -18,18 +22,24 @@ public class Main {
 		
 		
 		Person p= new Person("Adam");
+		Vehicle v=new Vehicle();
+		v.setName("Car");
 		
-		p.addCar(new Car(CarMarks.BMW,"GDA1235"));
-		p.addCar(new Car(CarMarks.Volvo,"GDA38721"));
-		p.addCar(new Car(CarMarks.Peugot,"GDA37626"));
-				
-		p.printCars();
-		try {
-			p.editCarPrize(p.findCar(CarMarks.BMW), 6);
-		} catch (MyException e1) {
-			
-			e1.printStackTrace();
+		Collection<Car> cars=new ArrayList<Car>();
+		
+		
+		cars.add(new Car(CarMarks.BMW,"GDA1235"));
+		cars.add(new Car(CarMarks.Volvo,"GDA38721"));
+		cars.add(new Car(CarMarks.Peugot,"GDA37626"));
+		p.setCars(cars);
+		
+		for(Car car : cars)
+		{
+			car.setOwner(p);
 		}
+		
+		p.printCars();
+		
 		p.printCars();
 		Car c =new Car(CarMarks.BMW,"GDA1235");
 		p.deleteCar(p.findCar(CarMarks.Peugot));
@@ -41,8 +51,22 @@ public class Main {
 		
 		System.out.println(p);
 		
+		Person p2 = new Person("Łukasz");
+		
 		Garage garage=new Garage();
-
+		garage.setAddress("Adres1");
+		
+		Garage garage2=new Garage();
+		garage2.setAddress("Adres2");
+		p2.getGarages().add(garage2);
+		garage2.getPersons().add(p2);
+		
+		p.getGarages().add(garage);
+		p.getGarages().add(garage2);
+		garage.getPersons().add(p);
+		garage2.getPersons().add(p);
+	
+		
 		ProcessCarListener clean=new CleanCar();
 		ProcessCarListener changeWheels = new ChangeWheels();
 		
@@ -52,21 +76,40 @@ public class Main {
 		garage.setCar(c);
 		garage.processCar();
 		
-		PersonDBManager db= new PersonDBManager();
-		db.addPerson(p);
+		List<Person> owners= new ArrayList<Person>();
 		
-		for(Person person: db.getAllPersons())
-		{
-			System.out.println(person);
-		}
 		
+		c.setVehicle(v);
 		SessionFactory sessionFactory= new Configuration().configure().buildSessionFactory();
 		Session session=sessionFactory.openSession();
 		session.beginTransaction();
-		session.save(c);
-		session.getTransaction().commit();
-		session.close();
+		/*session.save(p);
+		for(Car car :cars)
+		{
+			session.save(car);
+		}*/
+		session.persist(p);
 		
+		session.save(p2);
+		//session.save(garage2);
+		//session.save(garage);
+		session.get(Person.class, 1000);
+		session.getTransaction().commit();
+		int i=1;
+		Person temp;
+		do
+			{
+			owners.add((Person)session.get(Person.class,i));
+			i++;
+			}
+		while(session.get(Person.class,i)!=null);
+		
+		session.close();
+		System.out.println(owners.size());
+		for(Person person:owners)
+		{
+			System.out.println(person.getGarages().size());
+		}
 		
 	}
 

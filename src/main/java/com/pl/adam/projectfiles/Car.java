@@ -1,14 +1,44 @@
 package com.pl.adam.projectfiles;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 @Entity
 public class Car {
 
 	@Id
+	@GeneratedValue
 	private int id;
 	
+	@OneToOne
+	@JoinColumn(name="VEHICLE_ID")
+	private Vehicle vehicle;
+	@ManyToOne
+	@NotFound(action=NotFoundAction.IGNORE)
+	private Person owner;
+	
+	
+	public Person getOwner() {
+		return owner;
+	}
+
+	public void setOwner(Person owner) {
+		this.owner = owner;
+	}
+
+	public Vehicle getVehicle() {
+		return vehicle;
+	}
+
+	public void setVehicle(Vehicle vehicle) {
+		this.vehicle = vehicle;
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -64,9 +94,14 @@ public class Car {
 		this.prize=prize;
 	}
 	
-	public CarMarks getMark()
+	public CarMarks _getMark()
 	{
 		return this.mark;
+	}
+	
+	public String getMark()
+	{
+		return this.mark.toString();
 	}
 	
 	public void setMark(CarMarks mark)
