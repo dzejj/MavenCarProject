@@ -96,7 +96,6 @@ public class Main {
 		session.get(Person.class, 1000);
 		session.getTransaction().commit();
 		int i=1;
-		Person temp;
 		do
 			{
 			owners.add((Person)session.get(Person.class,i));

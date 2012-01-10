@@ -1,5 +1,6 @@
 package com.pl.adam.projectfiles;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -21,6 +22,9 @@ public class Car {
 	@ManyToOne
 	@NotFound(action=NotFoundAction.IGNORE)
 	private Person owner;
+	private String mark;
+	
+	private String register_number;
 	
 	
 	public Person getOwner() {
@@ -59,9 +63,6 @@ public class Car {
 	public double getPrize() {
 		return prize;
 	}
-	private CarMarks mark;
-	
-	private String register_number;
 	
 	public void setPrize(double prize) throws MyException
 	{
@@ -84,29 +85,28 @@ public class Car {
 	
 	public Car(CarMarks mark, String reg_number)
 	{
-		this.mark=mark;
+		this.mark=mark.toString();
 		this.register_number=reg_number;
 	}
 	
 	public Car(CarMarks mark,double prize)
 	{
-		this.mark=mark;
+		this.mark=mark.toString();
 		this.prize=prize;
 	}
 	
-	public CarMarks _getMark()
+	public String _getMark()
+	{
+		return this.mark;
+	}
+	public String getMark()
 	{
 		return this.mark;
 	}
 	
-	public String getMark()
-	{
-		return this.mark.toString();
-	}
-	
 	public void setMark(CarMarks mark)
 	{
-		this.mark=mark;
+		this.mark=mark.toString();
 	}
 	
 	public String getRegNumber()
